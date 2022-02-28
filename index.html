@@ -1,7 +1,4 @@
-<?php $VER = '1.0'; ?>
-<?php ob_start(); ?>
 
-<?php require __DIR__ . '/state.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,22 +7,68 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>jQuery Reactive</title>
-   <link rel="stylesheet" href="index.css?v=<?= $VER ?>">
-   <link rel="stylesheet" href="prism.css?v=<?= $VER ?>">
+   <link rel="stylesheet" href="index.css?v=1.0">
+   <link rel="stylesheet" href="prism.css?v=1.0">
 </head>
 <body>
    <div class="indicators">
-      <?php foreach ($state->indicators as $indicator) : ?>
-         <div class="indicator">
-            <div class="indicator__title"><?= $indicator->title ?></div>
-            <div class="indicator__value"><?= $indicator->value ?></div>
+               <div class="indicator">
+            <div class="indicator__title">DDS</div>
+            <div class="indicator__value">1120</div>
             <div>
-               <div class="indicator__last-refresh"><?= $indicator->last_refresh ?></div>
-               <div class="indicator__refresh-rate"><?= $indicator->refresh_rate ?>s</div>
+               <div class="indicator__last-refresh">13:12:01</div>
+               <div class="indicator__refresh-rate">3s</div>
             </div>
          </div>
-      <?php endforeach; ?>
-   </div>
+               <div class="indicator">
+            <div class="indicator__title">CDA</div>
+            <div class="indicator__value">3201</div>
+            <div>
+               <div class="indicator__last-refresh">01:12:20</div>
+               <div class="indicator__refresh-rate">5s</div>
+            </div>
+         </div>
+               <div class="indicator">
+            <div class="indicator__title">HEL</div>
+            <div class="indicator__value">5283</div>
+            <div>
+               <div class="indicator__last-refresh">09:38:11</div>
+               <div class="indicator__refresh-rate">0.5s</div>
+            </div>
+         </div>
+               <div class="indicator">
+            <div class="indicator__title">AOI</div>
+            <div class="indicator__value">7298</div>
+            <div>
+               <div class="indicator__last-refresh">15:01:33</div>
+               <div class="indicator__refresh-rate">1s</div>
+            </div>
+         </div>
+               <div class="indicator">
+            <div class="indicator__title">SUS</div>
+            <div class="indicator__value">5375</div>
+            <div>
+               <div class="indicator__last-refresh">03:39:59</div>
+               <div class="indicator__refresh-rate">8s</div>
+            </div>
+         </div>
+               <div class="indicator">
+            <div class="indicator__title">VAW</div>
+            <div class="indicator__value">2201</div>
+            <div>
+               <div class="indicator__last-refresh">23:28:08</div>
+               <div class="indicator__refresh-rate">0.75s</div>
+            </div>
+         </div>
+               <div class="indicator">
+            <div class="indicator__title">REC</div>
+            <div class="indicator__value">4851</div>
+            <div>
+               <div class="indicator__last-refresh">00:03:16</div>
+               <div class="indicator__refresh-rate">2s</div>
+            </div>
+         </div>
+         </div>
    <div class="ranges">
       <label>
          <input type="range" id="rangeHELRefreshRate" min="0.01" max="2" step="0.01">
@@ -196,13 +239,10 @@ state.indicators = {
 </pre>
    </div>
    
-   <script src="prism.js?v=<?= $VER ?>"></script>
+   <script src="prism.js?v=1.0"></script>
    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-   <script src="state.js?v=<?= $VER ?>"></script>
-   <script src="index.js?v=<?= $VER ?>"></script>
+   <script src="state.js?v=1.0"></script>
+   <script src="index.js?v=1.0"></script>
 </body>
 </html>
 
-<?php $html = ob_get_clean(); ?>
-<?php file_put_contents(__DIR__ . '/index.html', $html); ?>
-<?php echo $html; ?>
