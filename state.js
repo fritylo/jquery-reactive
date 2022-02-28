@@ -1,7 +1,9 @@
 ;(function () {
 /*
- * Created on Mon Feb 28 2022 10:35:54 AM
- * Author fritylo (https://github.com/fritylo)
+ * Created:     Mon Feb 28 2022 10:35:54 AM
+ * Author:      fritylo (https://github.com/fritylo)
+ * Repository:  https://github.com/fritylo/jquery-reactive
+ * Docs:        https://fritylo.github.io/jquery-reactive/
  * Copyright (c) 2022 frity corp.
  */
  
