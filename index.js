@@ -13,26 +13,26 @@ jQuery(function () {
 
       config.indicators[name] = {
          value_default: $('.indicator__value', indicator).text(),
-         value(value) {
-            blink($('.indicator__value', indicator).text(value));
+         value(__value__) {
+            blink($('.indicator__value', indicator).text(__value__));
          },
          
          lastRefresh_default: '13:12:01',
-         lastRefresh(value) {
-            blink($('.indicator__last-refresh', indicator).text(value));
+         lastRefresh(__value__) {
+            blink($('.indicator__last-refresh', indicator).text(__value__));
          },
          
          refreshRate_default: parseFloat($('.indicator__refresh-rate', indicator).text()),
-         refreshRate(value) {
-            let $rate = $('.indicator__refresh-rate', indicator).text(value + 's');
+         refreshRate(__value__) {
+            let $rate = $('.indicator__refresh-rate', indicator).text(__value__ + 's');
             
             blink($rate);
 
             clearInterval(interval);
-            createInterval(value);
+            createInterval(__value__);
             
             if (name == 'HEL') {
-               $(rangeHELRefreshRate).val(value);
+               $(rangeHELRefreshRate).val(__value__);
             }
          },
       };
@@ -40,11 +40,11 @@ jQuery(function () {
       let interval; 
       function createInterval(value) {
          interval = setInterval(() => {
-            const indicatorState = state.indicators[name];
+            const indicator = state.indicators[name];
             
-            indicatorState.value++;
+            indicator.value++;
 
-            indicatorState.lastRefresh = (new Date()).toLocaleTimeString('ru', {
+            indicator.lastRefresh = (new Date()).toLocaleTimeString('ru', {
                hour: 'numeric',
                minute: 'numeric',
                second: 'numeric',
