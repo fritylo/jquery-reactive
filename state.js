@@ -5,7 +5,7 @@
  * Repository:  https://github.com/fritylo/jquery-reactive
  * Docs:        https://fritylo.github.io/jquery-reactive/
  * Copyright (c) 2022 frity corp.
- */
+ */ 
  
 /**
  * ЧТО ЭТО?
