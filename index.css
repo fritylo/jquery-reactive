@@ -65,3 +65,9 @@ pre.language-javascript {
 .indicator__refresh-rate {
    color: #00f;
 }
+
+
+h1, h2, h3, h4 {
+   margin-bottom: 0.5em;
+   display: inline-block;
+}

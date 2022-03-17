@@ -7,8 +7,8 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>jQuery Reactive</title>
-   <link rel="stylesheet" href="index.css?v=1.0">
-   <link rel="stylesheet" href="prism.css?v=1.0">
+   <link rel="stylesheet" href="index.css?v=1.5">
+   <link rel="stylesheet" href="prism.css?v=1.5">
 </head>
 <body>
    <div class="indicators">
@@ -88,7 +88,10 @@
 
 
 
-<big>Библиотека: <strong>79 строк</strong> кода без сжатия.</big>
+<h1 style="width: 100%"><center>jQuery Reactive</center></h1>
+
+<big>Это библиотека для упрощения вывода данных средствами jQuery.</big>
+<big><strong>127 строк</strong> кода без сжатия.</big>
 <big>Использует последние фичи JS (старые браузеры плачут, но это поправимо)</big>
 
 Основные понятия:
@@ -101,73 +104,124 @@
 4. <strong><em>Обработчик</em></strong> - функция, которая вызывается при изменении значения переменной.
    Обычно отвечает за отрисовку изменений на странице (render).
 
-Как пользоваться?
-   <pre><code class="language-javascript">const config = {
-   rate_default: 10, // Начальное значение, постфикс _default зарезервирован
-   rate(value) { // Setter, вызывается при изменении свойства. Value - новое значение
-      $('.rate').text(value); // jQuery friendly
+<h2>Как использовать?</h2>
+<pre><code class="language-javascript">const config = {
+   // начальное значение переменной
+   variable_default: 10,
+   variable(value) {
+      // код который сработает при изменении переменной
+      // обычно тут выводим значение куда надо - обновляем инфу на странице
+      // для примера просто console.log
+      console.log(value);
    },
 };
 
+// создаем стейт
 const state = new State(config);
 
-state.rate++; // При изменении вызывается setter этого свойства</code></pre>
+state.variable; // 10, т.к. начальное значение
+state.variable = 666; // console.log(666) // сработал слушатель обновлений
+state.variable; // 666, значение обновилось</code></pre>
 
-Множественное присваивания для быстрого изменения состояния.
-   <pre><code class="language-javascript">// Индикаторы конфига заполним циклом
-const config = {
-   indicators: {},
-   helloMessage(value) {
-      alert('Hello, ' + value);
-   }
-};
-
-// Для всех индикаторов страницы
-$('.indicator').each((i, indicator) => {
-   // Берем имя (оно же заголовок)
-   const name = indicator.querySelector('.indicator__title').textContent;
-
-   // И создаем новый конфиг для этого индикатора
-   config.indicators[name] = {
-      // Сеттер для значения
-      value_default: $('.indicator__value', indicator).text(),
-      value(value) {
-         $('.indicator__value', indicator).text(value);
-      },
-      
-      // Сеттер для последнего обновления
-      lastRefresh_default: '13:12:01',
-      lastRefresh(value) {
-         $('.indicator__last-refresh', indicator).text(value);
-      },
-      
-      // Сеттер для частоты обновлений
-      refreshRate_default: parseFloat($('.indicator__refresh-rate', indicator).text()),
-      refreshRate(value) {
-         $('.indicator__refresh-rate', indicator).text(value + 's');
-      },
-   };
+<h2>Особенности:</h2>
+<h3>1. Объекты в конфиге - такие же стейты как и корневой стейт:</h3>
+<pre><code class="language-javascript">const state = new State({
+   data: {
+      var1() {...},
+      var2() {...},
+   },
 });
 
-// Создаем стейт по нашему конфигу
+state.data.var1; // OK</code></pre>  
+
+<h3>2. Можно быстро изменять значения всего стейта:</h3>
+<pre><code class="language-javascript">const state = new State({
+   data: {
+      var1() {...},
+      var2() {...}
+   },
+   another: {
+      prop1() {...},
+      prop2() {...},
+   },
+});
+
+state.data = { var1: 10, var2: 20 }; // Заменит значения двух переменных
+state.data = { var1: 11 }; // Значения которые не указаны - не изменяются. var2 без изменений
+// state = { data: {...}, another: {...} } - Не даст результатов. Быстрое изменение работает
+//                                           только на вложенных объектах стейта.</code></pre>  
+  
+<h3>3. Return - модификация значения. Используй return из сеттера, чтобы изменить сохраняемое значение</h3>
+<pre><code class="language-javascript">const config = {
+   // начальное значение переменной
+   variable_default: 10,
+   variable(value) {
+      // теперь значение всегда будет строкой
+      return value.toString();
+   },
+};
+
+// создаем стейт
 const state = new State(config);
 
-// Теперь можно менять значения переменных индикатора следующим образом
-state.indicators = {
-   DDS: {
-      title: 'DDS1',
-      value: 10,
+state.variable; // '10'
+typeof state.variable; // 'string'</code></pre>
+  
+<h3>4. Методы стейта</h3>
+<pre><code class="language-javascript">const config = {
+   // префикс function_ превращает сеттер в метод
+   function_sayHello(name) {
+      // выводим приветственное сообщение
+      alert('Hello, ' + name + '!');
    },
-   HEL: {
-      lastRefresh: '11:18:30',
+};
+
+// создаем стейт
+const state = new State(config);
+
+state.sayHello('Albert'); // Hello, Albert!</code></pre>
+  
+<h3>5. Старое значение</h3>
+<pre><code class="language-javascript">const config = {
+   // начальное значение переменной
+   variable_default: 10,
+   variable(value, oldValue) {
+      // вторым параметром сеттер получает значение до его изменения
+      console.log(value, oldValue);
+   },
+};
+
+// создаем стейт
+const state = new State(config);
+
+state.variable; // 10
+state.variable++; // 11 10</code></pre>
+  
+<h3>6. Обращение к стейту через this</h3>
+<pre><code class="language-javascript">const config = {
+   variable() {
+      console.log(this);
+   }
+  
+   object: {
+      variable() {
+         console.log(this);
+      }
    }
 };
 
-// Код выше меняет значения только тех переменных, которые были получены в присваиваемом объекте.
-// Что не было указано - не затирается.
-// Если указано то, что не существует - какает в консоль варнинг.</code></pre>
+// создаем стейт
+const state = new State(config);
 
-Код индикаторов в верху страницы:
+// this указывает на стейт
+state.variable++; // { variable: ..., object: ... }
+
+// все объекты внутри стейта превращаются в State, поэтому this указывает на state.object
+state.object.variable++; // { variable: ... }</code></pre>
+
+
+
+<details><summary>Код индикаторов в верху страницы</summary>
 <pre><code class="language-javascript">jQuery(function () {
    let State = window.State;
    
@@ -236,13 +290,14 @@ state.indicators = {
       $el.addClass('blink');
    }
 });</code></pre>
+</details>
 </pre>
    </div>
    
-   <script src="prism.js?v=1.0"></script>
+   <script src="prism.js?v=1.5"></script>
    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-   <script src="state.js?v=1.0"></script>
-   <script src="index.js?v=1.0"></script>
+   <script src="state.js?v=1.5"></script>
+   <script src="index.js?v=1.5"></script>
 </body>
 </html>
 
